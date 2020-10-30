@@ -9,6 +9,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#000000"
         android:theme="@style/Theme.Pokedex.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
@@ -16,11 +17,18 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/black"
-            app:popupTheme="@style/Theme.Pokedex.PopupOverlay" />
+            app:logo="@drawable/icon_ball"
+            app:popupTheme="@style/Theme.Pokedex.PopupOverlay"
+            app:title="Lista"
+            app:titleMargin="2dp"
+            app:titleTextColor="#FFFFFF" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_list" />
+    <include
+        layout="@layout/content_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
@@ -28,6 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
+        android:foreground="@drawable/pokeball"
         app:srcCompat="@android:drawable/ic_dialog_email" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
