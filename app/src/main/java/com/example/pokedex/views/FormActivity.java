@@ -1,7 +1,8 @@
-package com.example.pokedex;
+package com.example.pokedex.views;
 
 import android.os.Bundle;
 
+import com.example.pokedex.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -18,6 +19,18 @@ public class FormActivity extends AppCompatActivity {
         setContentView(R.layout.activity_form);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //Boton para ir atrás
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Asignar la acción necesaria. En este caso "volver atrás"
+                onBackPressed();
+            }
+        });
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
