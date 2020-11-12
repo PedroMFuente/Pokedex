@@ -27,7 +27,6 @@ public class ListActivity extends AppCompatActivity implements ListInterface.Vie
         Log.d(TAG, "Starting Create");
         super.onCreate(savedInstanceState);
 
-
         Log.d(TAG, "Loading layout");
         setContentView(R.layout.activity_list);
 

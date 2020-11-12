@@ -12,7 +12,7 @@
         <activity
             android:name=".views.FormActivity"
             android:label="@string/title_activity_form"
-            android:theme="@style/Theme.Pokedex.NoActionBar"></activity>
+            android:theme="@style/Theme.Pokedex.NoActionBar" />
         <activity
             android:name=".views.LogoActivity"
             android:label="@string/title_activity_logo"

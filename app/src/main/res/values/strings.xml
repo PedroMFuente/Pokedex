@@ -12,6 +12,7 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_activity_list">ListActivity</string>
     <string name="title_activity_form">FormActivity</string>
+    <string name="title_activity_borrar">borrar</string>
     <!-- Strings used for fragments for navigation -->
 
 </resources>
