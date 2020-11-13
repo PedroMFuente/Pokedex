@@ -23,7 +23,7 @@
 
             <Button
                 android:id="@+id/buttonCancel"
-                android:layout_width="206dp"
+                android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:backgroundTint="#9F9F9F"
                 android:text="Cancelar"
@@ -35,7 +35,7 @@
 
             <Button
                 android:id="@+id/buttonSave"
-                android:layout_width="206dp"
+                android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:backgroundTint="#9F9F9F"
                 android:text="Guardar"
@@ -54,7 +54,7 @@
                 android:background="@drawable/camara__"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/textname"
+                app:layout_constraintStart_toEndOf="@+id/textInputName"
                 app:layout_constraintTop_toBottomOf="@+id/buttonSave" />
 
             <Button
@@ -74,8 +74,8 @@
                 android:id="@+id/textInputName"
                 android:layout_width="175dp"
                 android:layout_height="40dp"
-                android:layout_marginStart="28dp"
-                android:layout_marginTop="44dp"
+                android:layout_marginStart="48dp"
+                android:layout_marginTop="36dp"
                 android:hint="Nombre"
                 android:textColor="#000000"
                 android:textColorHint="#141414"
@@ -86,8 +86,8 @@
                 android:id="@+id/textname"
                 android:layout_width="175dp"
                 android:layout_height="40dp"
-                android:layout_marginStart="28dp"
-                android:layout_marginTop="44dp"
+                android:layout_marginStart="48dp"
+                android:layout_marginTop="36dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/buttonCancel">
 
@@ -97,7 +97,7 @@
                 android:id="@+id/textItem"
                 android:layout_width="175dp"
                 android:layout_height="40dp"
-                android:layout_marginStart="28dp"
+                android:layout_marginStart="48dp"
                 android:layout_marginTop="108dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/buttonCancel">
@@ -108,12 +108,12 @@
                 android:id="@+id/textInputItem"
                 android:layout_width="175dp"
                 android:layout_height="40dp"
-                android:layout_marginStart="28dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginStart="48dp"
+                android:layout_marginTop="32dp"
                 android:hint="Objeto"
                 android:textColorHint="#141414"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textname" />
+                app:layout_constraintTop_toBottomOf="@+id/textInputName" />
 
             <Spinner
                 android:id="@+id/tipe1"
@@ -168,7 +168,7 @@
 
             <Switch
                 android:id="@+id/switch1"
-                android:layout_width="146dp"
+                android:layout_width="128dp"
                 android:layout_height="27dp"
                 android:layout_marginTop="68dp"
                 android:background="#000000"
@@ -210,6 +210,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textdate" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textHp"
                 android:layout_width="175dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="48dp"
@@ -221,7 +222,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textInputEditText2"
+                android:id="@+id/textInputHp"
                 android:layout_width="175dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="48dp"
@@ -233,6 +234,99 @@
                 app:layout_constraintHorizontal_bias="0.202"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textAtt" />
+
+            <ImageView
+                android:id="@+id/imageattc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="64dp"
+                app:layout_constraintEnd_toStartOf="@+id/textAtt"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView10"
+                app:srcCompat="@drawable/physical" />
+
+            <ImageView
+                android:id="@+id/imagelife"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="72dp"
+                app:layout_constraintEnd_toStartOf="@+id/textHp"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageattc"
+                app:srcCompat="@drawable/other" />
+
+            <ImageView
+                android:id="@+id/imageView6"
+                android:layout_width="46dp"
+                android:layout_height="21dp"
+                android:layout_marginTop="60dp"
+                app:layout_constraintEnd_toStartOf="@+id/tipe1"
+                app:layout_constraintHorizontal_bias="0.764"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textItem"
+                app:srcCompat="@drawable/_0px_tipo____" />
+
+            <ImageView
+                android:id="@+id/imageView7"
+                android:layout_width="46dp"
+                android:layout_height="21dp"
+                android:layout_marginTop="56dp"
+                app:layout_constraintEnd_toStartOf="@+id/tipe2"
+                app:layout_constraintHorizontal_bias="0.761"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView6"
+                app:srcCompat="@drawable/_0px_tipo____" />
+
+            <ImageView
+                android:id="@+id/imageView8"
+                android:layout_width="19dp"
+                android:layout_height="18dp"
+                android:layout_marginTop="72dp"
+                app:layout_constraintEnd_toStartOf="@+id/switch1"
+                app:layout_constraintHorizontal_bias="0.987"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/buttonClearimg"
+                app:srcCompat="@drawable/estrella_pok_mon_variocolor" />
+
+            <ImageView
+                android:id="@+id/imageView9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="48dp"
+                app:layout_constraintEnd_toStartOf="@+id/textItem"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView11"
+                app:srcCompat="@drawable/aranja" />
+
+            <ImageView
+                android:id="@+id/imageView10"
+                android:layout_width="19dp"
+                android:layout_height="19dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="68dp"
+                app:layout_constraintEnd_toStartOf="@+id/textdate"
+                app:layout_constraintHorizontal_bias="0.307"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView7"
+                app:srcCompat="@drawable/pokemon_egg_png" />
+
+            <ImageView
+                android:id="@+id/imageView11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="48dp"
+                app:layout_constraintEnd_toStartOf="@+id/textInputName"
+                app:layout_constraintHorizontal_bias="0.333"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/buttonCancel"
+                app:srcCompat="@drawable/ditto_ranger" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
