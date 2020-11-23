@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pokédex</string>
+    <string name="next">Siguiente</string>
+    <string name="previous">Anterior</string>
+    <string name="title_activity_borrar">Borrar</string>
+    <string name="hint_name">Nombre</string>
+    <string name="hint_item">Objeto</string>
+    <string name="text_shiny">Variocolor</string>
+    <string name="button_clean">Limpiar imagen</string>
+    <string name="hint_attack">Ataque</string>
+    <string name="hint_hp">Puntos de salud</string>
+    <string name="button_save">Guardar</string>
+    <string name="button_cancel">Cancelar</string>
+    <string name="title_activity_form">Formulario</string>
+    <string name="title_activity_list">Lista</string>
+    <string name="title_activity_search">Buscador</string>
+    <string name="error_name">Longitud máxima de 10 carácteres</string>
+</resources>

@@ -19,7 +19,7 @@
             android:background="@color/black"
             app:logo="@drawable/icon_ball"
             app:popupTheme="@style/Theme.Pokedex.PopupOverlay"
-            app:title="Lista"
+            app:title="@string/title_activity_list"
             app:titleMargin="2dp"
             app:titleTextColor="#FFFFFF" />
 

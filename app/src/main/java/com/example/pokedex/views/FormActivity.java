@@ -5,7 +5,10 @@ import android.os.Bundle;
 
 import com.example.pokedex.R;
 import com.example.pokedex.interfaces.FormInterface;
+import com.example.pokedex.models.PokemonEntity;
 import com.example.pokedex.presenters.FormPresenter;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -14,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 public class FormActivity extends AppCompatActivity implements FormInterface.View{
@@ -69,16 +73,28 @@ public class FormActivity extends AppCompatActivity implements FormInterface.Vie
 
         });
 
-        /*presenter = new FormPresenter((FormInterface.View) this);
-        Button button1 =findViewById(R.id.button1);
-        button1.setOnClickListener(new View.OnClickListener() {
+
+        //crear un pokemon
+        PokemonEntity poke = new PokemonEntity();
+        TextInputEditText nameET = findViewById(R.id.textInputName);
+        TextInputLayout nameL = findViewById(R.id.textname);
+
+        nameET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onClick(View v) {
-                Log.d(TAG, "Click on CANCEL button");
-                //presenter.onClickCancelButton();
-                onBackPressed();
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus){
+                    Log.d(TAG,"Exit editText");
+                    if(poke.setName(nameET.getText().toString())){
+                        nameL.setError(presenter.getError(""));
+                    }else{
+                        nameL.setError(presenter.getError("Name"));
+                    }
+                }else{
+
+                }
             }
-        });*/
+        });
+
     }
 
     @Override
