@@ -30,4 +30,20 @@
         <item name="android:typeface">monospace</item>
     </style>
 
+    <style name="formswitch" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">#FF1C1C</item>
+
+        <!-- inactive thumb color -->
+        <item name="colorSwitchThumbNormal">#f1f1f1</item>
+    </style>
+
+    <style name="sameground">
+        <item name="android:background">#404040</item>
+    </style>
+
+    <style name="spinnercolor">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
 </resources>

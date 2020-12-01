@@ -17,4 +17,16 @@ public class ListPresenter implements ListInterface.Presenter {
         Log.d(TAG, "onClickFloatinbutton");
         view.startFormActivity();
     }
+
+    @Override
+    public void onClickSearchButton(){
+        Log.d(TAG,"onclickSearchButton");
+        view.startSearchActivity();
+    }
+
+    @Override
+    public void onClickAboutButton() {
+        Log.d(TAG, "onclicAboutButton");
+        view.startAboutActivity();
+    }
 }

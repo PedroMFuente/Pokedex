@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.SearchActivity">
+    tools:context=".views.AboutActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -18,10 +18,10 @@
             android:background="?attr/colorPrimary"
             app:logo="@drawable/icon_ball"
             app:popupTheme="@style/Theme.Pokedex.PopupOverlay"
-            app:title="@string/title_activity_search" />
+            app:title="@string/title_activity_about" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_search" />
+    <include layout="@layout/content_about" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
