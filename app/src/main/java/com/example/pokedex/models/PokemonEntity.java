@@ -6,21 +6,31 @@ import android.widget.Spinner;
 
 import androidx.annotation.RequiresApi;
 
+import com.example.pokedex.R;
+import com.example.pokedex.views.MyApplication;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PokemonEntity {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
+public class PokemonEntity extends RealmObject {
+
+    @PrimaryKey
+    private String id;
     private String name;
     private String item;
-    private LocalDate date;
+    private String date;
     private String type1;
     private String type2;
     private int attack;
     private int hp;
+    private String image ="";
+    private boolean shiny;
 
     public PokemonEntity(){
     }
@@ -32,7 +42,7 @@ public class PokemonEntity {
     public boolean setName(String name) {
         boolean flag=false;
         if(name!=null && name.length()>0 && name.length()<=10){
-            this.name = name;
+            this.name = name.toUpperCase();
             flag=true;
         }
         return flag;
@@ -55,7 +65,7 @@ public class PokemonEntity {
         return flag;
     }
 
-    public LocalDate getDate() {
+    public String getDate() {
         return date;
     }
 
@@ -71,7 +81,7 @@ public class PokemonEntity {
                 try{
                     DateTimeFormatter formatters = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                     truedate=LocalDate.parse(date,formatters);
-                    this.date=truedate;
+                    this.date=date;
                     dateflag=true;
                     Log.d("brrr", "setDate: ");
                 }catch(Exception e){
@@ -79,7 +89,7 @@ public class PokemonEntity {
                         DateTimeFormatter formatters = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                         truedate=LocalDate.parse(date,formatters);
                         dateflag=true;
-                        this.date =truedate;
+                        this.date =date;
                     }catch (Exception ex){
                         dateflag=false;
                     }
@@ -126,9 +136,10 @@ public class PokemonEntity {
         return type1;
     }
 
-    public boolean setType1(String type, List<String> list){
+    public boolean setType1(String type){
         boolean flag=false;
         if(type!=null){
+            //if(type.equals(MyApplication.getContext().getString(R.string.spinnertype)))
             if(type!="--NINGUNO--"){
                 this.type1=type;
                 flag=true;
@@ -141,15 +152,56 @@ public class PokemonEntity {
         return type2;
     }
 
-    public boolean setType2(String type, List<String> list){
+    public boolean setType2(String type){
         boolean flag=false;
 
         if(type!=null){
+            //if(type.equals(MyApplication.getContext().getString(R.string.spinnertype)))
             if(!type.equals(this.getType1())){
                 this.type2=type;
                 flag=true;
             }
         }
         return flag;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public boolean isShiny() {
+        return shiny;
+    }
+
+    public void setShiny(boolean shiny) {
+        this.shiny = shiny;
+    }
+
+    @Override
+    public String toString() {
+        return "PokemonEntity{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", item='" + item + '\'' +
+                ", date='" + date + '\'' +
+                ", type1='" + type1 + '\'' +
+                ", type2='" + type2 + '\'' +
+                ", attack=" + attack +
+                ", hp=" + hp +
+                ", image='" + image + '\'' +
+                ", shiny=" + shiny +
+                '}';
     }
 }

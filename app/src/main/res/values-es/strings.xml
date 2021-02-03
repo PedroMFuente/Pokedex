@@ -17,7 +17,7 @@
     <string name="title_activity_search">Buscar</string>
     <string name="error_name">Longitud máxima de 10 carácteres</string>
     <string name="error_item">No puede contener números</string>
-    <string name="amountlist">0 Pokémon añadidos</string>
+    <string name="amountlist">"  Pokémon añadidos"</string>
     <string name="error_attack">No puede ser mayor que 255</string>
     <string name="error_hp">No puede ser mayor que 255</string>
     <string name="add">Añadir</string>
@@ -39,4 +39,9 @@
     <string name="developed_name">Desarrollado por: PedroM de la Fuente Fernández</string>
     <string name="developed_contact">Contacto: apdefuente@iesfranciscodelosrios.es</string>
     <string name="menu_about">Sobre mí</string>
+    <string name="quesSavePokemon">¿Guardar pokémon?</string>
+    <string name="choosepicture">Elige una foto</string>
+    <string name="nosave">Pokémon no guardado</string>
+    <string name="delbut">Pokémon eliminado</string>
+    <string name="errordel">Error al intentar eliminar</string>
 </resources>

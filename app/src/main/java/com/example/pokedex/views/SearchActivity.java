@@ -3,6 +3,7 @@ package com.example.pokedex.views;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.pokedex.interfaces.SearchInferface;
@@ -35,6 +36,9 @@ public class SearchActivity extends AppCompatActivity implements SearchInferface
     private SearchInferface.Presenter presenter;
     DatePickerDialog datepickerdialog;
     Context mycontext=this;
+    private TextInputEditText nameEt;
+    private Spinner s;
+    private TextView dateET;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,17 +63,6 @@ public class SearchActivity extends AppCompatActivity implements SearchInferface
         tipelist.add("PLANTA");
         spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipelist));
 
-        //Boton Search
-        presenter = new SearchPresenter((SearchInferface.View) this);
-        Button searchbutton = findViewById(R.id.searchbutton);
-        searchbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "Click button search");
-                presenter.onClickSearchButton();
-            }
-        });
-
         //Fecha
         int year, month, day;
 
@@ -78,20 +71,68 @@ public class SearchActivity extends AppCompatActivity implements SearchInferface
         month=cal.get(Calendar.MONTH);
         day=cal.get(Calendar.DAY_OF_MONTH);
 
-        TextView dateET = findViewById(R.id.SearchtextView);
+        dateET = findViewById(R.id.SearchtextView);
         dateET.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 datepickerdialog = new DatePickerDialog(mycontext, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        dateET.setText(String.valueOf(dayOfMonth)+ "/" + String.valueOf(month) +"/"+String.valueOf(year));
+                        String zeroday=null;
+                        String zeromonth=null;
+                        month++;
+                        if(dayOfMonth>9){
+                            zeroday=Integer.toString(dayOfMonth);
+                        }else{
+                            zeroday="0"+dayOfMonth;
+                        }
+                        if(month>9){
+                            zeromonth=Integer.toString(month);
+                        }else{
+                            zeromonth="0"+month;
+                        }
+                        dateET.setText(zeroday+ "/" + zeromonth +"/"+String.valueOf(year));
                     }
                 }, year, month, day);
                 datepickerdialog.show();
             }
         });
 
+        s = findViewById(R.id.Searchspinner);
+        nameEt = findViewById(R.id.SearchInputEditName);
+
+
+        //Boton Search
+        presenter = new SearchPresenter((SearchInferface.View) this);
+        Button searchbutton = findViewById(R.id.searchbutton);
+
+        searchbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = getIntent();
+                boolean result=false;
+
+                if(nameEt!=null&&nameEt.getText().toString().length()>0){
+                    i.putExtra("name",nameEt.getText().toString().toUpperCase());
+                    Log.d("PASO","PUEDE");
+                    setResult(RESULT_OK, i);
+                    result=true;
+                }else if(dateET!=null&&!dateET.getText().toString().equals("dd/mm/yyyy") ){
+                    i.putExtra("date",dateET.getText().toString().toUpperCase());
+                    setResult(RESULT_OK, i);
+                    result=true;
+                }else if(s!=null&&!s.getSelectedItem().toString().equals("--NINGUNO--")){
+                    i.putExtra("type1",s.getSelectedItem().toString());
+                    setResult(RESULT_OK, i);
+                    result=true;
+                }
+
+                if(result){
+                    finish();
+                    Log.d("FUERA", String.valueOf(result));
+                }
+            }
+        });
 
         //Boton para ir atrás
         Log.d(TAG,"Botón para ir hacia atrás");

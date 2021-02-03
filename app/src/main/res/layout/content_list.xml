@@ -8,9 +8,9 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/rVlist"
         android:layout_width="416dp"
-        android:layout_height="643dp"
+        android:layout_height="734dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

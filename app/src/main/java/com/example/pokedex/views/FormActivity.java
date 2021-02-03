@@ -1,11 +1,16 @@
 package com.example.pokedex.views;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -13,14 +18,20 @@ import com.example.pokedex.R;
 import com.example.pokedex.interfaces.FormInterface;
 import com.example.pokedex.models.PokemonEntity;
 import com.example.pokedex.presenters.FormPresenter;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,18 +40,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Month;
-import java.time.MonthDay;
-import java.time.Year;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -51,6 +59,11 @@ public class FormActivity extends AppCompatActivity implements FormInterface.Vie
     private ArrayAdapter<String> adapter;
     Context mycontext=this;
     DatePickerDialog datepickerdialog;
+    private String id;
+    private ImageView imgG;
+    private ConstraintLayout cl;
+    private PokemonEntity aux;
+    private Switch shiny;
 
     @SuppressLint("ResourceType")
     @Override
@@ -58,12 +71,27 @@ public class FormActivity extends AppCompatActivity implements FormInterface.Vie
         Log.d(TAG, "Starting Create");
         super.onCreate(savedInstanceState);
 
+        presenter = new FormPresenter(this);
+
         Log.d(TAG, "Loading layout");
         setContentView(R.layout.activity_form);
 
         Log.d(TAG, "Loading toolbar");
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        imgG=findViewById(R.id.imageGalery);
+        imgG.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.WriteExternalStoragePermission();
+            }
+        });
+
+        cl=findViewById(R.id.consLay);
+        shiny = findViewById(R.id.switch1);
+
+        id=getIntent().getStringExtra("id");
 
         //Spinner 1
         Log.d(TAG, "Spinner1");
@@ -74,13 +102,15 @@ public class FormActivity extends AppCompatActivity implements FormInterface.Vie
         tipelist.add("FUEGO");
         tipelist.add("AGUA");
         tipelist.add("PLANTA");
+        tipelist.add("HIELO");
+        tipelist.add("TIERRA");
+        tipelist.add("PSIQUICO");
         spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipelist));
 
         //Spinner 2
         Log.d(TAG, "Spinner1");
         Spinner spinner2 = (Spinner) findViewById(R.id.tipe2);
         spinner2.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipelist));
-
 
 
         // Definición del Adaptador que contiene la lista de opciones
@@ -160,19 +190,6 @@ public class FormActivity extends AppCompatActivity implements FormInterface.Vie
                 onBackPressed();
             }
         });
-
-        //Boton save
-        presenter = new FormPresenter((FormInterface.View) this);
-        Button button2 =findViewById(R.id.buttonSave);
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "Click on SAVE button");
-                presenter.onClickSaveButton();
-            }
-
-        });
-
 
         //crear un pokemon
         PokemonEntity poke = new PokemonEntity();
@@ -263,7 +280,7 @@ public class FormActivity extends AppCompatActivity implements FormInterface.Vie
             public void onFocusChange(View v, boolean hasFocus) {
                 if(!hasFocus){
                     Log.d(TAG,"Exit spinner type1");
-                    if(poke.setType1(t1ET.getSelectedItem().toString(),tipelist)){
+                    if(poke.setType1(t1ET.getSelectedItem().toString())){
                         t1L.setError(presenter.getError(""));
                     }else{
                         t1L.setError(presenter.getError("Type1"));
@@ -282,7 +299,7 @@ public class FormActivity extends AppCompatActivity implements FormInterface.Vie
             public void onFocusChange(View v, boolean hasFocus) {
                 if(!hasFocus){
                     Log.d(TAG, "Exit spinner type2");
-                    if(poke.setType2(t2ET.getSelectedItem().toString(),tipelist)){
+                    if(poke.setType2(t2ET.getSelectedItem().toString())){
                         t2L.setError(presenter.getError(""));
                     }else{
                         t2L.setError(presenter.getError("Type2"));
@@ -290,6 +307,7 @@ public class FormActivity extends AppCompatActivity implements FormInterface.Vie
                 }
             }
         });
+
 
         //Eliminar
         Button deletebut = findViewById(R.id.buttonCancel);
@@ -304,7 +322,7 @@ public class FormActivity extends AppCompatActivity implements FormInterface.Vie
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Log.d(TAG,"Yes button clicked");
-                        presenter.onClickDeleteButton();
+                        presenter.onClickDeleteButton(id);
                     }
                 });
 
@@ -339,7 +357,20 @@ public class FormActivity extends AppCompatActivity implements FormInterface.Vie
                         @Override
                         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                             //the month have "+1" because in the activity put the month before to the selected
-                            dateET.setText(String.valueOf(dayOfMonth)+ "/" + String.valueOf(month+1) +"/"+String.valueOf(year));
+                            String zeroday=null;
+                            String zeromonth=null;
+                            month++;
+                            if(dayOfMonth>9){
+                                zeroday=Integer.toString(dayOfMonth);
+                            }else{
+                                zeroday="0"+dayOfMonth;
+                            }
+                            if(month>9){
+                                zeromonth=Integer.toString(month);
+                            }else{
+                                zeromonth="0"+month;
+                            }
+                            dateET.setText(zeroday+ "/" + zeromonth +"/"+String.valueOf(year));
                         }
                     }, year, month, day);
                     datepickerdialog.show();
@@ -360,7 +391,259 @@ public class FormActivity extends AppCompatActivity implements FormInterface.Vie
                 }
             }
         });
+
+        if(id!=null){
+            aux=presenter.GetPokemonById(id);
+
+            if(aux!=null){
+                nameET.setText(aux.getName());
+                itemET.setText(aux.getItem());
+                attackET.setText(Integer.toString(aux.getAttack()));
+                hpET.setText(Integer.toString(aux.getHp()));
+                dateET.setText(aux.getDate());
+                t1ET.setSelection(adapter.getPosition(aux.getType1()));
+                t2ET.setSelection(adapter.getPosition(aux.getType2()));
+                shiny.setChecked(aux.isShiny());
+
+                if(poke.getImage()!=null && !aux.equals("")){
+                    byte[] b = Base64.decode(aux.getImage(), Base64.DEFAULT);
+                    Bitmap bm = BitmapFactory.decodeByteArray(b, 0, b.length);
+                    imgG.setImageBitmap(bm);
+                }
+              }
+
+        }else{
+            t1ET.setSelection(adapter.getPosition(MyApplication.getContext().getString(R.string.spinnertype)));
+            t2ET.setSelection(adapter.getPosition(MyApplication.getContext().getString(R.string.spinnertype)));
+            deletebut.setEnabled(false);
+            deletebut.setVisibility(View.INVISIBLE);
+        }
+
+        Button butdelimg = findViewById(R.id.buttonClearimg);
+        butdelimg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imgG.setImageBitmap(null);
+                imgG.setBackground(ContextCompat.getDrawable(mycontext, R.drawable.camara__));
+            }
+        });
+
+        //Boton save
+        presenter = new FormPresenter((FormInterface.View) this);
+        Button button2 =findViewById(R.id.buttonSave);
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "Click on SAVE button");
+
+                AlertDialog.Builder alertsv= new AlertDialog.Builder(FormActivity.this);
+                alertsv.setMessage(MyApplication.getContext().getResources().getString(R.string.quesSavePokemon));
+                alertsv.setPositiveButton(MyApplication.getContext().getResources().getString(R.string.yes), new DialogInterface.OnClickListener(){
+                            @RequiresApi(api = Build.VERSION_CODES.O)
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                boolean result=true;
+                                PokemonEntity poke = new PokemonEntity();
+
+                                //name
+                                boolean np= poke.setName(nameET.getText().toString());
+                                if(np){
+                                    nameL.setError(presenter.getError(""));
+                                }else{
+                                    result=false;
+                                    nameL.setError(presenter.getError("Name"));
+                                }
+
+                                //date
+                                np=poke.setDate(dateET.getText().toString());
+                                if(np){
+                                    dateL.setError(presenter.getError(""));
+                                }else{
+                                    result=false;
+                                    dateL.setError(presenter.getError("Date"));
+                                }
+
+                                //attack
+                                np=poke.setAttack(attackET.getText().toString());
+                                if(np){
+                                    attackL.setError(presenter.getError(""));
+                                }else{
+                                    result=false;
+                                    attackL.setError(presenter.getError("Attack"));
+                                }
+
+                                //hp
+                                np=poke.setHp(hpET.getText().toString());
+                                if(np){
+                                    hpL.setError(presenter.getError(""));
+                                }else{
+                                    result=false;
+                                    hpL.setError(presenter.getError("Hp"));
+                                }
+
+                                //type1
+                                np=poke.setType1(t1ET.getSelectedItem().toString());
+                                if(np){
+                                    t1L.setError(presenter.getError(""));
+                                }else{
+                                    result=false;
+                                    t1L.setError(presenter.getError("Type1"));
+                                }
+
+                                //type2
+                                np=poke.setType2(t2ET.getSelectedItem().toString());
+                                if (np) {
+                                    t2L.setError(presenter.getError(""));
+                                }else{
+                                    result=false;
+                                    t2L.setError(presenter.getError("Type2"));
+                                }
+
+                                //item
+                                np=poke.setItem(itemET.getText().toString());
+                                if(np){
+                                    itemL.setError(presenter.getError(""));
+                                }else{
+                                    result=false;
+                                    itemL.setError(presenter.getError("Item"));
+                                }
+
+                                poke.setShiny(shiny.isChecked());
+
+                                //image
+                                if(imgG!=null&&imgG.getDrawable()!=null){
+                                    Bitmap bm = ((BitmapDrawable) imgG.getDrawable()).getBitmap();
+                                    if(bm!=null){
+                                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                        bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                                        byte[] bArray = baos.toByteArray();
+                                        String imgIn64 = Base64.encodeToString(bArray, Base64.DEFAULT);
+                                        poke.setImage(imgIn64);
+                                    }
+                                }
+
+                                if(result){
+                                    if(id==null){
+                                        //no tiene id => es nuevo
+                                        presenter.onClickSaveButton(poke);
+                                    }else{
+                                        //tiene id => updatear
+                                        poke.setId(id);
+                                        presenter.onClickEditButton(poke);
+                                    }
+                                }
+                            }
+                        });
+
+                alertsv.setNegativeButton(MyApplication.getContext().getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).create().show();
+            }
+        });
+                nameET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if(!hasFocus){
+                            boolean aux=poke.setName(nameET.getText().toString());
+                            if(!aux){
+                                nameL.setError(presenter.getError("Name"));
+                            }else{
+                                nameL.setError(presenter.getError(""));
+                            }
+                        }
+                    }
+                });
+
+                dateET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if(!hasFocus){
+                            boolean aux=poke.setDate(dateET.getText().toString());
+                            if(!aux){
+                                nameL.setError(presenter.getError("Date"));
+                            }else{
+                                nameL.setError(presenter.getError(""));
+                            }
+                        }
+                    }
+                });
+
+                attackET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if(!hasFocus){
+                            boolean aux=poke.setAttack(attackET.getText().toString());
+                            if(!aux){
+                                attackL.setError(presenter.getError("Attack"));
+                            }else{
+                                attackL.setError(presenter.getError(""));
+                            }
+                        }
+                    }
+                });
+
+                hpET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if(!hasFocus){
+                            boolean aux=poke.setHp(hpET.getText().toString());
+                            if(!aux){
+                                hpL.setError(presenter.getError("Hp"));
+                            }else{
+                                hpL.setError(presenter.getError(""));
+                            }
+                        }
+                    }
+                });
+
+                t1ET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if(!hasFocus){
+                            boolean aux=poke.setType1(t1ET.getSelectedItem().toString());
+                            if(!aux){
+                                t1L.setError(presenter.getError("Type1"));
+                            }else{
+                                t1L.setError(presenter.getError(""));
+                            }
+                        }
+                    }
+                });
+
+                t2ET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if(!hasFocus){
+                            boolean aux=poke.setType2(t2ET.getSelectedItem().toString());
+                            if(!aux){
+                                t2L.setError(presenter.getError("Type2"));
+                            }else{
+                                t2L.setError(presenter.getError(""));
+                            }
+                        }
+                    }
+                });
+
+                itemET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if(!hasFocus){
+                            boolean aux=poke.setItem(itemET.getText().toString());
+                            if(!aux){
+                                itemL.setError(presenter.getError("Item"));
+                            }else{
+                                itemL.setError(presenter.getError(""));
+                            }
+                        }
+                    }
+                });
     }
+
+
 
     @Override
     protected void onResume(){
@@ -396,7 +679,6 @@ public class FormActivity extends AppCompatActivity implements FormInterface.Vie
     public void finishFormActivity() {
         //Save
         finish();
-        Toast.makeText(getApplicationContext(), MyApplication.getContext().getResources().getString(R.string.savebut),Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -409,5 +691,75 @@ public class FormActivity extends AppCompatActivity implements FormInterface.Vie
     @Override
     public void deleteFormActivity() {
         finish();
+    }
+
+    @Override
+    public void PermissionRefused() {
+        Snackbar.make(cl, getResources().getString(R.string.no), Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void PermissionGiven() {
+        Snackbar.make(cl, getResources().getString(R.string.yes), Snackbar.LENGTH_LONG).show();
+        presenter.ShowGallery();
+    }
+
+    @Override
+    public void PermissionRequest() {
+        ActivityCompat.requestPermissions(FormActivity.this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE},123);
+    }
+
+    @Override
+    public void SelectPhoto() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.choosepicture)), 201);
+    }
+
+    @Override
+    public void SavePokemon() {
+        Toast toast = Toast.makeText(getApplicationContext(), R.string.savebut, Toast.LENGTH_LONG);
+    }
+
+    @Override
+    public void NoSavePokemon() {
+        Toast toast = Toast.makeText(getApplicationContext(), R.string.nosave, Toast.LENGTH_LONG);
+    }
+
+    @Override
+    public void DeleteAcp() {
+        Toast toast = Toast.makeText(getApplicationContext(),getResources().getString(R.string.delbut), Toast.LENGTH_LONG);
+    }
+
+    @Override
+    public void Deletent() {
+        Toast toast = Toast.makeText(getApplicationContext(),getResources().getString(R.string.errordel), Toast.LENGTH_LONG);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==201){
+            if(resultCode== Activity.RESULT_OK){
+                Uri selImg = data.getData();
+                String selPath= selImg.getPath();
+
+                if(selPath != null){
+                    InputStream ims = null;
+                    try{
+                        ims = getContentResolver().openInputStream(selImg);
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+
+                    Bitmap bm = BitmapFactory.decodeStream(ims);
+
+                    ImageView imv = findViewById(R.id.imageGalery);
+                    imv.setImageBitmap(bm);
+                    imv.setBackground(null);
+                }
+            }
+        }
     }
 }

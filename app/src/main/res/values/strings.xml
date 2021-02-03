@@ -26,8 +26,11 @@
     <string name="title_activity_search">Search</string>
 
     <!-- ListActivity -->
-    <string name="amountlist">0 Pokémon added</string>
+    <string name="amountlist">  Pokémon added</string>
     <string name="savebut">Pokémon saved</string>
+    <string name="delbut">Pokémon deleted</string>
+    <string name="nosave">Pokémon dont saved</string>
+    <string name="errordel">Error to try eliminate</string>
 
     <!-- Menu -->
     <string name="menu_about">About me</string>
@@ -60,5 +63,8 @@
     <!-- About -->
     <string name="developed_name">Developed by: PedroM de la Fuente Fernández</string>
     <string name="developed_contact">Contact: apdefuente@iesfranciscodelosrios.es</string>
+
+    <string name="quesSavePokemon">Save Pokémon?</string>
+    <string name="choosepicture">Choose a picture</string>
 
 </resources>
