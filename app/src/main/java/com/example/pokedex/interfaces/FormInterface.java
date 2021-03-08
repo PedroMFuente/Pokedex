@@ -16,6 +16,7 @@ public interface FormInterface {
         void NoSavePokemon();
         void DeleteAcp();
         void Deletent();
+        void Help();
     }
 
     public interface Presenter {
@@ -30,5 +31,6 @@ public interface FormInterface {
         void WriteExternalStoragePermission();
         List<String> GetType();
         String getError(String name);
+        void CallHelp();
     }
 }

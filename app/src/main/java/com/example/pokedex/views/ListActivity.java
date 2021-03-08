@@ -193,6 +193,9 @@ public class ListActivity extends AppCompatActivity implements ListInterface.Vie
         if(id == R.id.action_about){
             presenter.onClickAboutButton();
         }
+        if(id==R.id.action_help){
+            this.presenter.CallHelp();
+        }
         if(id == R.id.action_refresh){
             cc=-1;
             listspokemon.clear();
@@ -263,5 +266,12 @@ public class ListActivity extends AppCompatActivity implements ListInterface.Vie
             adaptador.notifyDataSetChanged();
             textmany.setText(Integer.toString(listspokemon.size())+getString(R.string.amountlist));
         }
+    }
+
+    @Override
+    public void Help() {
+        Intent i = new Intent(getApplicationContext(), HelpActivity.class);
+        i.putExtra("aux","list");
+        startActivity(i);
     }
 }

@@ -11,6 +11,7 @@ public interface ListInterface {
         void startAboutActivity();
         void startFormActivity(String id);
         void DeletePokemon();
+        void Help();
     }
 
     public interface Presenter {
@@ -25,5 +26,6 @@ public interface ListInterface {
         ArrayList<PokemonEntity> searchdate(String n);
         ArrayList<PokemonEntity> searchname(String n);
         ArrayList<PokemonEntity> searchtype(String n);
+        void CallHelp();
     }
 }

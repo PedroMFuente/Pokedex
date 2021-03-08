@@ -18,4 +18,9 @@ public class SearchPresenter implements SearchInferface.Presenter {
         Log.d(TAG,"onclickSearchButton");
         view.Searchit();
     }
+
+    @Override
+    public void CallHelp() {
+        view.Help();
+    }
 }

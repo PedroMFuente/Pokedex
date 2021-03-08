@@ -3,6 +3,7 @@
     package="com.example.pokedex">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:name=".views.MyApplication"
@@ -13,9 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Pokedex">
         <activity
+            android:name=".views.HelpActivity"
+            android:label="@string/title_activity_help"
+            android:theme="@style/Theme.Pokedex.NoActionBar"></activity>
+        <activity
             android:name=".views.AboutActivity"
             android:label="@string/title_activity_about"
-            android:theme="@style/Theme.Pokedex.NoActionBar"></activity>
+            android:theme="@style/Theme.Pokedex.NoActionBar" />
         <activity
             android:name=".views.SearchActivity"
             android:label="@string/title_activity_search"

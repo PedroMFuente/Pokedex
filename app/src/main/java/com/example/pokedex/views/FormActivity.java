@@ -22,6 +22,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
@@ -35,6 +36,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -689,6 +691,15 @@ public class FormActivity extends AppCompatActivity implements FormInterface.Vie
     }
 
     @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if(id==R.id.action_help){
+            this.presenter.CallHelp();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void deleteFormActivity() {
         finish();
     }
@@ -735,6 +746,13 @@ public class FormActivity extends AppCompatActivity implements FormInterface.Vie
     @Override
     public void Deletent() {
         Toast toast = Toast.makeText(getApplicationContext(),getResources().getString(R.string.errordel), Toast.LENGTH_LONG);
+    }
+
+    @Override
+    public void Help() {
+        Intent i = new Intent(getApplicationContext(), HelpActivity.class);
+        i.putExtra("aux","form");
+        startActivity(i);
     }
 
     @Override

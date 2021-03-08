@@ -12,11 +12,13 @@ import com.example.pokedex.presenters.SearchPresenter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -185,7 +187,23 @@ public class SearchActivity extends AppCompatActivity implements SearchInferface
     }
 
     @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if(id==R.id.action_help){
+            this.presenter.CallHelp();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void Searchit() {
         finish();
+    }
+
+    @Override
+    public void Help() {
+        Intent i = new Intent(getApplicationContext(), HelpActivity.class);
+        i.putExtra("aux","search");
+        startActivity(i);
     }
 }

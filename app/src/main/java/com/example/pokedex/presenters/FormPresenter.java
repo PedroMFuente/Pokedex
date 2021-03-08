@@ -139,6 +139,10 @@ public class FormPresenter implements FormInterface.Presenter {
         return error_msg;
     }
 
+    @Override
+    public void CallHelp() {
+        view.Help();
+    }
 
 
 }

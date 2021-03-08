@@ -224,5 +224,9 @@ public class ListPresenter implements ListInterface.Presenter {
         return new PokemonModel().SearchType(n);
     }
 
+    @Override
+    public void CallHelp() {
+        view.Help();
+    }
 
 }
